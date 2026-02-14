@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>valentine · untuk Maya (dari kakak kelas)</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    body {
+      background: linear-gradient(145deg, #1f1714 0%, #2d2228 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Patrick Hand', cursive;
+      overflow: hidden;
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      touch-action: pan-y;
+    }
+
+    /* bokeh lembut */
+    .bokeh {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at 20% 30%, #ffcfb540 0%, transparent 40%),
+                  radial-gradient(circle at 90% 60%, #ffb0c090 0%, transparent 45%),
+                  radial-gradient(circle at 30% 80%, #fff0b080 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* kartu utama - amplop vintage */
+    .masterpiece-card {
+      position: relative;
+      width: min(480px, 92vw);
+      background: #fffbf5;
+      background: linear-gradient(165deg, #fffdf9, #feefe6);
+      border-radius: 56px 56px 56px 20px;
+      box-shadow: 0 60px 80px -20px #070403, 0 0 0 1px #eac0af inset, 0 0 0 4px #fff3ea inset;
+      padding: 32px 25px 35px 25px;
+      z-index: 20;
+      border: 2px solid #f0bcac;
+      transition: transform 0.4s ease;
+      margin: 0 8px;
+      max-height: 95vh;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* pita dekoratif */
+    .ribbon-corner {
+      position: absolute;
+      top: -8px;
+      right: 20px;
+      width: 80px;
+      height: 80px;
+      background: #ffa07a;
+      background: linear-gradient(135deg, #ffb999, #ff7f7f);
+      clip-path: polygon(0 0, 100% 0, 100% 100%);
+      border-radius: 0 30px 0 50px;
+      z-index: 5;
+      opacity: 0.7;
+      box-shadow: -5px 5px 15px #4f2929;
+    }
+
+    /* header dengan nama */
+    .greeting-header {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.4rem;
+      color: #9f4b4b;
+      margin: 10px 0 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      border-bottom: 3px dotted #f0c7b8;
+      padding-bottom: 18px;
+    }
+
+    /* badge kelas */
+    .class-badge {
+      display: flex;
+      justify-content: center;
+      gap: 25px;
+      margin: 15px 0 20px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      background: #f2d9cf;
+      border-radius: 70px;
+      padding: 12px 28px;
+      font-size: 1.4rem;
+      color: #6a3f3f;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 8px 12px #b48b7a, inset 0 2px 8px #fff7ea;
+      border: 1px solid #e6a790;
+    }
+
+    .badge.highlight {
+      background: #ffd7c2;
+      border: 2px solid #db7f64;
+    }
+
+    /* area pesan */
+    .message-window {
+      font-size: 1.5rem;
+      line-height: 1.5;
+      color: #523a2e;
+      background: rgba(255, 240, 230, 0.8);
+      padding: 28px 25px;
+      border-radius: 60px 60px 60px 20px;
+      box-shadow: inset 0 8px 20px #e9cfc0, 0 7px 0 #cfa490;
+      border: 2px solid #f5bea8;
+      margin: 20px 0 25px;
+      word-break: break-word;
+      text-align: center;
+      backdrop-filter: blur(2px);
+      min-height: 130px;
+      transition: all 0.3s ease;
+    }
+
+    /* tanda tangan */
+    .signature-block {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 15px 0 25px;
+      padding: 0 5px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .signature-name {
+      font-size: 1.9rem;
+      color: #864848;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #ffefe4;
+      padding: 8px 25px;
+      border-radius: 60px;
+      box-shadow: inset 0 1px 8px #d6af9d;
+    }
+
+    .date-tag {
+      background: #dbb8aa;
+      padding: 10px 22px;
+      border-radius: 80px;
+      font-size: 1.4rem;
+      color: #2f1f19;
+      box-shadow: 0 6px 0 #7d5b4e;
+      border: 1px solid #fad7c4;
+    }
+
+    /* area tombol */
+    .button-panel {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+      margin: 15px 0 10px;
+    }
+
+    .primary-btn {
+      background: #ffad95;
+      background: linear-gradient(145deg, #ffcab3, #ff947a);
+      border: none;
+      padding: 18px 45px;
+      border-radius: 120px;
+      font-family: 'Patrick Hand', cursive;
+      font-size: 2rem;
+      color: #2e1d16;
+      box-shadow: 0 20px 28px -8px #732e1f, 0 5px 0 0 #a55b48, 0 0 0 4px #ffe7dc inset;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      -webkit-appearance: none;
+      appearance: none;
+      border: 1px solid #ffc8b2;
+      min-width: 270px;
+      touch-action: manipulation;
+    }
+
+    .secondary-btn {
+      background: #e3cdc0;
+      background: linear-gradient(145deg, #f5ded1, #dbbcac);
+      border: none;
+      padding: 15px 40px;
+      border-radius: 100px;
+      font-family: 'Patrick Hand', cursive;
+      font-size: 1.8rem;
+      color: #392b24;
+      box-shadow: 0 15px 22px -8px #543c30, 0 4px 0 0 #8b6b5d, 0 0 0 3px #fff4ea inset;
+      cursor: pointer;
+      min-width: 230px;
+      border: 1px solid #eecdbd;
+    }
+
+    .secondary-btn:active, .primary-btn:active {
+      transform: scale(0.95);
+      box-shadow: 0 8px 15px -5px #642b1f, 0 2px 0 0 #af6250;
+    }
+
+    /* counter penolakan */
+    .rejection-track {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      margin: 18px 0 8px;
+      padding: 10px 20px;
+      background: #fceae3;
+      border-radius: 70px;
+      border: 1px solid #eabbab;
+    }
+
+    .heart-chip {
+      background: #f8cfc0;
+      border-radius: 50px;
+      padding: 10px 25px;
+      font-size: 1.4rem;
+      color: #a04242;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid #e79d86;
+    }
+
+    .footnote-area {
+      font-size: 1.2rem;
+      color: #aa7b6b;
+      text-align: center;
+      margin-top: 20px;
+      border-top: 2px dashed #eec2b2;
+      padding-top: 18px;
+      font-style: italic;
+    }
+
+    /* animasi fade */
+    .fade-item {
+      animation: gentleRise 0.8s ease forwards;
+      opacity: 0;
+    }
+
+    @keyframes gentleRise {
+      0% { opacity: 0; transform: translateY(18px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    /* responsive */
+    @media (max-width: 450px) {
+      .greeting-header { font-size: 2rem; }
+      .message-window { font-size: 1.3rem; padding: 20px; }
+      .primary-btn { font-size: 1.8rem; padding: 15px 30px; min-width: 240px; }
+      .secondary-btn { font-size: 1.6rem; padding: 12px 28px; min-width: 200px; }
+      .badge { font-size: 1.2rem; padding: 8px 20px; }
+      .signature-name { font-size: 1.6rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bokeh"></div>
+
+  <div class="masterpiece-card" id="mainCard">
+    <div class="ribbon-corner"></div>
+
+    <!-- header dengan nama maya -->
+    <div class="greeting-header fade-item" style="animation-delay: 0.1s">
+      <span>🌸</span> Maya <span>🌸</span>
+    </div>
+
+    <!-- badge kelas: 12 vs 11 -->
+    <div class="class-badge fade-item" style="animation-delay: 0.15s">
+      <span class="badge highlight">🧑‍🎓 kelas 12</span>
+      <span class="badge">👩‍🎓 kelas 11</span>
+    </div>
+
+    <!-- AREA PESAN DINAMIS -->
+    <div class="message-window fade-item" id="messageDisplay" style="animation-delay: 0.2s">
+      <!-- diisi javascript -->
+    </div>
+
+    <!-- signature -->
+    <div class="signature-block fade-item" style="animation-delay: 0.25s">
+      <div class="signature-name">
+        <span>✍️</span> dekel ucull
+      </div>
+      <div class="date-tag">
+        14 februari 2026
+      </div>
+    </div>
+
+    <!-- panel tombol -->
+    <div class="button-panel" id="buttonPanel">
+      <button class="primary-btn" id="mainActionBtn">💌 buka ucapan</button>
+      <button class="secondary-btn" id="secondaryActionBtn" style="display: none;">🌸 satu lagi?</button>
+    </div>
+
+    <!-- rejection tracker (muncul setelah fase nembak) -->
+    <div class="rejection-track" id="rejectionTracker" style="display: none;">
+      <span class="heart-chip">❤️ kesempatan <span id="chanceLeft">3</span></span>
+    </div>
+
+    <div class="footnote-area" id="footerNote">
+      *dari kakak kelas yang bakal lulus
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      // ====================== STATE ======================
+      // Fase:
+      // 0 = awal (ucapan valentine)
+      // 1 = setelah buka, muncul pesan valentine + lanjut ke "nembak"?
+      // 2 = fase confess (3 kesempatan)
+      // 3 = final (diterima / ditolak 3x)
+      let phase = 0;             
+      let confessionStep = 0;     // 0 belum confess, 1 udah mulai confess, dll
+      let rejectCount = 0;
+      const MAX_REJECT = 3;
+
+      // elemen2
+      const msgEl = document.getElementById('messageDisplay');
+      const mainBtn = document.getElementById('mainActionBtn');
+      const secondBtn = document.getElementById('secondaryActionBtn');
+      const rejectionTracker = document.getElementById('rejectionTracker');
+      const chanceSpan = document.getElementById('chanceLeft');
+      const footer = document.getElementById('footerNote');
+
+      // ====================== KATA-KATA ======================
+      const valentineMessage = "met valentine dekel ucull, yang gabakal ketemu di sekolah lagi beberapa bulan kedepan. aku lulus duluan ya. moga tahun depan kamu lulus wkwk 🌻";
+
+      // pesan confess yang romantis (3 kesempatan)
+      const confessMessages = [
+        "Maya, aku suka sama kamu. Lebih dari sekedar kakak kelas. Mau jadi pacarku? 💖",
+        "kamu beneran nolak? :( coba deh pikirin lagi.. aku tulus kok 💕",
+        "yang terakhir.. please? aku gak akan nyerah semudah ini 🥺"
+      ];
+
+      const acceptMessage = "yaaay! aku janji bakal jadi yang terbaik buat kamu. happy valentine! ❤️🌹";
+
+      const finalRejectMessage = "ya udah kalau memang gamau ya ga maksa si toh teman level max juga gapapa, sapa tauw nanti jodoh awkwk 🌿";
+
+      // ====================== FUNGSI UPDATE UI ======================
+      function updateDisplay() {
+        // update chance display
+        chanceSpan.innerText = MAX_REJECT - rejectCount;
+
+        if (phase === 0) {
+          msgEl.innerText = "💐 ada sesuatu buat kamu, maya . . .";
+          mainBtn.style.display = 'block';
+          mainBtn.innerText = '💌 buka ucapan';
+          secondBtn.style.display = 'none';
+          rejectionTracker.style.display = 'none';
+          footer.innerText = '*dari kakak kelas yang bakal lulus';
+        }
+        else if (phase === 1) {
+          // setelah buka, tampilkan pesan valentine
+          msgEl.innerText = valentineMessage;
+          mainBtn.style.display = 'block';
+          mainBtn.innerText = '🌷 ada yang mau aku omongin';
+          secondBtn.style.display = 'none';
+          rejectionTracker.style.display = 'none';
+          footer.innerText = '*lanjut?';
+        }
+        else if (phase === 2) {
+          // fase confess: tampilkan pesan confess sesuai rejectCount
+          if (rejectCount < MAX_REJECT) {
+            msgEl.innerText = confessMessages[rejectCount];  // 0,1,2
+            mainBtn.style.display = 'none';
+            secondBtn.style.display = 'block';
+            secondBtn.innerText = (rejectCount === MAX_REJECT-1) ? '💔 terakhir?' : '🌸 gak mau?';
+            rejectionTracker.style.display = 'flex';
+            footer.innerText = '*kamu masih punya kesempatan';
+          }
+
+          // kalau rejectCount sudah mencapai max, masuk phase 3 final reject (handle di fungsi reject)
+        }
+        else if (phase === 3) {
+          if (rejectCount >= MAX_REJECT) {
+            // ditolak final
+            msgEl.innerText = finalRejectMessage;
+            mainBtn.style.display = 'none';
+            secondBtn.style.display = 'none';
+            rejectionTracker.style.display = 'none';
+            footer.innerText = '❤️‍🩹 teman level max juga berharga';
+          } else {
+            // diterima (karena fase 3 bisa dicapai dari accept)
+            msgEl.innerText = acceptMessage;
+            mainBtn.style.display = 'none';
+            secondBtn.style.display = 'none';
+            rejectionTracker.style.display = 'none';
+            footer.innerText = '💞 terima kasih sudah memilih aku';
+          }
+        }
+      }
+
+      // ====================== TINDAKAN ======================
+      // Tombol utama (buka ucapan / lanjut ke confess)
+      function handleMainAction() {
+        if (navigator.vibrate) navigator.vibrate(15);
+
+        if (phase === 0) {
+          phase = 1;
+          updateDisplay();
+        }
+        else if (phase === 1) {
+          // lanjut ke fase confess (nembak)
+          phase = 2;
+          rejectCount = 0;  // mulai dari 0
+          updateDisplay();
+        }
+      }
+
+      // Tombol kedua: "gak mau?" / "satu lagi?" (untuk nolak)
+      function handleReject() {
+        if (navigator.vibrate) navigator.vibrate(10);
+        if (phase !== 2) return;
+
+        if (rejectCount < MAX_REJECT - 1) {
+          // masih ada kesempatan
+          rejectCount++;
+          updateDisplay();
+        } 
+        else if (rejectCount === MAX_REJECT - 1) {
+          // ini penolakan ke-3 (terakhir) -> jadi MAX_REJECT
+          rejectCount++;  // menjadi 3
+          phase = 3;      // fase final reject
+          updateDisplay();
+        }
+      }
+
+      // Tombol rahasia: menerima (bisa dari mana aja, tapi kita tambah tombol tersembunyi? 
+      // user bisa menerima dengan menekan area tertentu, tapi biar elegan: setelah confess, kita kasih tombol "terima"?
+      // lebih baik: pada fase confess, kita tambah tombol terima secara eksplisit atau sentuh pesan?
+      // Biar simpel: kita buat tombol kedua juga bisa untuk menerima kalau user klik lama? no.
+      // Saya tambah tombol ketiga kecil di pojok? tapi biar gak ribet, kita pakai event klik di kartu (dengan syarat)
+      // Kita tambah cara: saat fase confess, jika user menekan tombol "satu lagi?" sebenarnya untuk nolak. 
+      // Tapi kita perlu tombol "Iya". Saya tambah di panel: tombol iya akan muncul di fase 2.
+      // Karena itu kita modif sedikit: tambah satu tombol iya di samping tombol tidak.
+
+      // ========== TOMBOL TERIMA (akan ditambahkan secara manual di HTML via js) ==========
+      // kita sisipkan tombol IYA di buttonPanel bersebelahan dengan tombol tidak
+      function createAcceptButton() {
+        // cek apakah sudah ada
+        if (document.getElementById('acceptConfessBtn')) return;
+        const acceptBtn = document.createElement('button');
+        acceptBtn.id = 'acceptConfessBtn';
+        acceptBtn.className = 'secondary-btn';
+        acceptBtn.innerText = '❤️ iya';
+        acceptBtn.style.marginLeft = '10px';
+        acceptBtn.style.background = '#ffb9a9';
+        // letakkan di buttonPanel, di samping secondaryActionBtn
+        const panel = document.getElementById('buttonPanel');
+        panel.appendChild(acceptBtn);
+
+        acceptBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          if (phase === 2) {
+            // diterima
+            phase = 3;
+            rejectCount = 0; // reset aja
+            updateDisplay();
+            if (navigator.vibrate) navigator.vibrate([20,40,20]);
+            // sembunyikan acceptBtn & secondBtn
+            document.getElementById('acceptConfessBtn').style.display = 'none';
+            secondBtn.style.display = 'none';
+          }
+        });
+        acceptBtn.addEventListener('touchstart', (e) => {
+          e.preventDefault();
+          if (phase === 2) {
+            phase = 3;
+            rejectCount = 0;
+            updateDisplay();
+            if (navigator.vibrate) navigator.vibrate([20,40,20]);
+            document.getElementById('acceptConfessBtn').style.display = 'none';
+            secondBtn.style.display = 'none';
+          }
+        }, { passive: false });
+      }
+
+      // sembunyikan/munculkan tombol iya sesuai fase
+      function toggleAcceptButton(show) {
+        let acceptBtn = document.getElementById('acceptConfessBtn');
+        if (!acceptBtn && show) {
+          createAcceptButton();
+          acceptBtn = document.getElementById('acceptConfessBtn');
+        }
+        if (acceptBtn) {
+          acceptBtn.style.display = show ? 'inline-block' : 'none';
+        }
+      }
+
+      // override updateDisplay untuk atur accept button
+      const originalUpdate = updateDisplay;
+      updateDisplay = function() {
+        originalUpdate();
+
+        if (phase === 2) {
+          toggleAcceptButton(true);
+        } else {
+          toggleAcceptButton(false);
+        }
+
+        // juga atur posisi tombol iya agar tidak double
+        if (phase === 2) {
+          // pastikan tombol iya ada
+          createAcceptButton();
+          const acceptBtn = document.getElementById('acceptConfessBtn');
+          if (acceptBtn) acceptBtn.style.display = 'inline-block';
+        }
+      };
+
+      // ====================== EVENT LISTENERS ======================
+      mainBtn.addEventListener('click', (e) => { e.preventDefault(); handleMainAction(); });
+      mainBtn.addEventListener('touchstart', (e) => { e.preventDefault(); handleMainAction(); }, { passive: false });
+
+      secondBtn.addEventListener('click', (e) => { e.preventDefault(); handleReject(); });
+      secondBtn.addEventListener('touchstart', (e) => { e.preventDefault(); handleReject(); }, { passive: false });
+
+      // inisialisasi
+      updateDisplay();
+
+      // efek fade pada ganti pesan
+      const originalSetter = Object.getOwnPropertyDescriptor(Node.prototype, 'innerText').set;
+      Object.defineProperty(msgEl, 'innerText', {
+        set: function(value) {
+          originalSetter.call(this, value);
+          this.style.transition = 'opacity 0.3s';
+          this.style.opacity = '0.6';
+          setTimeout(() => { this.style.opacity = '1'; }, 70);
+          setTimeout(() => { this.style.transition = ''; }, 300);
+        },
+        get: function() { return this.innerText; }
+      }.bind(msgEl));
+
+      // sedikit getar awal
+    })();
+  </script>
+</body>
+</html>
